@@ -19,10 +19,16 @@ scottyHandler :: [String] -> Handler ActionM
 scottyHandler keys = Handler keys getBody getHeader where
   getBody = do
     ret <- S.body
-    liftIO $ putStr $ "debug body: "
+    liftIO $ putStrLn $ "debug Body: "
     liftIO $ B.putStrLn ret
     return $ B.toStrict ret
-  getHeader = (fmap . fmap) (T.encodeUtf8 . T.toStrict) . S.header . T.fromStrict . T.decodeUtf8
+  getHeader key = do
+    liftIO $ putStr $ "get Header "
+    liftIO $ print $ key
+    val <- (fmap . fmap) (T.encodeUtf8 . T.toStrict) . S.header . T.fromStrict . T.decodeUtf8 $ key
+    liftIO $ putStr "got Header: "
+    liftIO $ print $ maybe "Nothing" id val
+    return val
 
 main :: IO ()
 main = scotty 3000 $ do
