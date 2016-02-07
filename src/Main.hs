@@ -21,4 +21,4 @@ main = scotty 3000 $ do
     res <- runHandler (scottyHandler [])
     case res of
       Left err -> liftIO $ print "derp"
-      Right (uuid, paylod) -> liftIO $ print "Hey"
+      Right (uuid, payload) -> liftIO $ print payload
